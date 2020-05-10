@@ -11,7 +11,8 @@
 #
 # sudo storescp 109 -v -aet TESTSCP -od <YOUR_DIRECTORY>
 #
-# Use storescu command to send the files (pyton's os.system call can invoke OS command line)
+# Use storescu command to send the files. Use the provided os_command function to issue a
+# command line with storescu
 #
 # The data that you need to send is in ./data directory. You might want to use dcmdump to 
 # take a look at DICOM files and figure out what would be a good way to distinguish 
@@ -21,6 +22,15 @@ import os
 import pydicom
 import sys
 import numpy as np
+import subprocess
+
+def os_command(command):
+    # Comment this if running under Windows
+    sp = subprocess.Popen(["/bin/bash", "-i", "-c", command])
+    sp.communicate()
+
+    # Uncomment this if running under Windows
+    # os.system(command)
 
 if __name__ == "__main__":
     
@@ -47,5 +57,5 @@ if __name__ == "__main__":
     if (len(flair_series) != 1):
         exit("Error: More than one FLAIR candidates")
 
-    os.system(f"storescu 127.0.0.1 109 -v -aec TESTSCU +r +sd \"{os.path.dirname(flair_series[0][0][0])}\"")
+    os_command(f"storescu 127.0.0.1 109 -v -aec TESTSCU +r +sd \"{os.path.dirname(flair_series[0][0][0])}\"")
     pass
