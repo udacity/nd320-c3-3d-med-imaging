@@ -45,12 +45,12 @@ if __name__ == "__main__":
     def sensitivity(gt,pred):
         # Sens = TP/(TP+FN)
         tp = np.sum(gt[gt==pred])
-        fn = np.sum(gt[gt!=pred])
+        overall_p = np.sum(gt[gt==1])
 
-        if fn+tp == 0:
+        if overall_p == 0:
             return -1
 
-        return (tp)/(fn+tp)
+        return (tp)/(overall_p)
 
     print(f"Sensitivity: {sensitivity(lbl1, lbl2)}")
 
